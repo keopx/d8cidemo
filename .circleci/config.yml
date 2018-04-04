@@ -36,6 +36,9 @@ unit_kernel_tests: &unit_kernel_tests
     - checkout
     - restore_cache: *restore_cache
     - run:
+        name: Wait for the database service to be ready
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m    
+    - run:
         name: Set up and run Unit and Kernel tests
         command: |
           apache2-foreground&
@@ -91,6 +94,9 @@ code_sniffer: &code_sniffer
   steps:
     - checkout
     - restore_cache: *restore_cache
+    - run:
+        name: Wait for the database service to be ready
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m
     - run:
         name: Set up and inspect coding standards
         command: |
